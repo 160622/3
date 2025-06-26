@@ -1,0 +1,19 @@
+import pandas as pd
+
+# Step 1: Create and Export data
+data = {
+    'Name': ['john', 'alice', 'bob'],
+    'Age': [28, 24, 30],
+    'City': ['new york', 'los angeles', 'chicago']
+}
+df = pd.DataFrame(data)
+
+# Export to CSV
+export_path = r'C:\7084aiml\data.csv'   # full path with filename
+df.to_csv(export_path, index=False)
+print("Data has been exported into CSV file.")
+
+# Step 2: Import the exported CSV file
+df_imported = pd.read_csv(export_path)
+print("\nData imported from CSV file:")
+print(df_imported)
