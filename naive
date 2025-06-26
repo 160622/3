@@ -1,0 +1,43 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# Sample text data
+data = {'text': ["I love programming", "Machine learning is fascinating", "Spam emails are annoying",
+"Python is a great language", "Buy our new product now"]}
+labels = [1, 1, 0, 1, 0] # 1 for positive, 0 for negative
+
+# Create a DataFrame
+df = pd.DataFrame({'text': data['text'], 'label': labels})
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(df['text'], df['label'], test_size=0.2, random_state=42)
+
+# Vectorize the text data using CountVectorizer
+vectorizer = CountVectorizer()
+X_train_vectorized = vectorizer.fit_transform(X_train)
+X_test_vectorized = vectorizer.transform(X_test)
+
+# Initialize the Naive Bayes model (Multinomial Naive Bayes for text data)
+naive_bayes = MultinomialNB()
+
+# Train the model
+naive_bayes.fit(X_train_vectorized, y_train)
+
+# Make predictions on the test set
+y_pred = naive_bayes.predict(X_test_vectorized)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+classification_rep = classification_report(y_test, y_pred)
+
+# Get all unique labels from the training data to ensure the confusion matrix has the correct shape
+all_labels = sorted(y_train.unique())
+conf_matrix = confusion_matrix(y_test, y_pred, labels=all_labels)
+
+
+print("Accuracy:", accuracy)
+print("\nClassification Report:\n", classification_rep)
+print("\nConfusion Matrix:\n", conf_matrix)
