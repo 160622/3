@@ -1,0 +1,40 @@
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import metrics
+
+# Load the dataset
+df = pd.read_csv('PlayTennis.csv')
+
+# Encode categorical variables
+enc = LabelEncoder()
+df_encoded = pd.DataFrame()
+df_encoded['Outlook'] = enc.fit_transform(df['Outlook'])
+df_encoded['Temperature'] = enc.fit_transform(df['Temperature'])
+df_encoded['Humidity'] = enc.fit_transform(df['Humidity'])
+df_encoded['Wind'] = enc.fit_transform(df['Wind'])
+df_encoded['Play Tennis'] = enc.fit_transform(df['Play Tennis'])
+
+# Split features and target
+X = df_encoded.drop('Play Tennis', axis=1)
+y = df_encoded['Play Tennis']
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+
+# Train the Decision Tree Classifier
+clf = DecisionTreeClassifier(criterion='entropy')
+clf.fit(X_train, y_train)
+
+# Predict on test set
+y_pred = clf.predict(X_test)
+
+# Print results
+print("X_train:\n", X_train)
+print("\nX_test:\n", X_test)
+print("\ny_train:\n", y_train)
+print("\ny_test:\n", y_test)
+print("\ny_pred:\n", y_pred)
+print("\nAccuracy:", metrics.accuracy_score(y_test, y_pred))
