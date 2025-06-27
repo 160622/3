@@ -1,0 +1,30 @@
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+#Load the Iris dataset
+iris_data = load_iris()
+X = iris_data.data
+Y = iris_data.target
+
+#Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+
+#Intitalize the AdaBoost Classifier with Decision Tree as base estimator
+adaboost = AdaBoostClassifier(n_estimators=50, random_state = 42)
+
+#Train the Model
+adaboost.fit(X_train, y_train)
+
+#Make Predictions on the test set
+y_pred = adaboost.predict(X_test)
+
+#Evaluate the Model
+accuracy = accuracy_score(y_test, y_pred)
+classification_rep = classification_report(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+print("Accuracy:", accuracy)
+print("\nClassification Report:\n", classification_rep)
+print("\nConfusion Matrix:\n", conf_matrix)
