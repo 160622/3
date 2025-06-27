@@ -1,0 +1,24 @@
+import numpy as np
+from sklearn.neural_network import MLPRegressor
+from sklearn.preprocessing import MinMaxScaler
+
+# Original input and output
+x = np.array([[2, 9], [1, 5], [3, 6]], dtype=float)
+y = np.array([[92], [86], [89]], dtype=float)
+
+# Normalize input and output
+x = x / np.amax(x, axis=0)
+y = y / 100
+
+# Train MLPRegressor
+model = MLPRegressor(hidden_layer_sizes=(3,), activation='logistic',  # 'logistic' = sigmoid
+                     max_iter=7000, learning_rate_init=0.1, random_state=42)
+
+model.fit(x, y.ravel())  # ravel to flatten y into 1D
+
+# Predict
+y_pred = model.predict(x)
+
+print("Normalized Input:\n", x)
+print("Actual Output:\n", y)
+print("Predicted Output:\n", y_pred)
